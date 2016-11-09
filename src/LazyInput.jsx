@@ -17,6 +17,13 @@ var LazyInput = React.createClass({
     };
   },
   getInitialState: function() {
+    [ 'blur', 'focus' ].forEach(method => {
+      this[method] = () => {
+        if(this.input && this.input[method]) {
+          this.input[method]();
+        }
+      };
+    });
     return { value: this.props.value };
   },
   componentWillReceiveProps: function(nextProps) {
@@ -56,6 +63,7 @@ var LazyInput = React.createClass({
     for(var key in this.props) { if(key !== 'lazyLevel') { props[key] = this.props[key]; } }
     props.value = this.state.value;
     if(props.onChange) { props.onChange = this.onChange; }
+    props.ref = input => { this.input = input; };
     return props;
   },
   render: function() {
